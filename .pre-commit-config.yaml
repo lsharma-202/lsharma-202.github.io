@@ -1,0 +1,40 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+  - id: check-yaml
+  - id: check-json
+    types: [text]
+    files: \.(json|jsonld)$
+  - id: check-added-large-files
+    args: ['--maxkb=3000']
+  - id: check-case-conflict
+  - id: check-merge-conflict
+  - id: detect-private-key
+  - id: end-of-file-fixer
+  - id: pretty-format-json
+    types: [text]
+    files: \.(json|jsonld)$
+    args: ['--autofix']
+  - id: trailing-whitespace
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.5
+  hooks:
+  - id: remove-tabs
+    exclude_types: [makefile, batch]
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.14.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2', --preserve-quotes]
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.10.0.1
+  hooks:
+  - id: shellcheck
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v3.29.1
+  hooks:
+  - id: commitizen
+    stages: [commit-msg]
+  - id: commitizen-branch
+    stages: [pre-push]
