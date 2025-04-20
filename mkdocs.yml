@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: My Portfolio
+site_url: https://lsharma-202.github.io
+theme:
+  name: material
+#  features:
+#    - navigation.instant
+#    - navigation.tracking
+#    - search.suggest
+#    - search.highlight
+#    - search.share
+#    - header.autohide
