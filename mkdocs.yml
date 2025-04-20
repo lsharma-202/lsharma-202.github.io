@@ -3,10 +3,20 @@ site_name: My Portfolio
 site_url: https://lsharma-202.github.io
 theme:
   name: material
-#  features:
-#    - navigation.instant
-#    - navigation.tracking
-#    - search.suggest
-#    - search.highlight
-#    - search.share
-#    - header.autohide
+  palette:
+
+  - media: "(prefers-color-scheme: light)"
+    scheme: default
+    primary: black
+    accent: brown
+    toggle:
+      icon: material/weather-sunny
+      name: Switch to dark mode
+
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    primary: teal
+    accent: deep orange
+    toggle:
+      icon: material/weather-night
+      name: Switch to light mode
