@@ -1,10 +1,22 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
-site_name: My Portfolio
+site_name: Lokesh Sharma
 site_url: https://lsharma-202.github.io
 theme:
   name: material
+  custom_dir: overrides
+  font:
+    text: Open Sans
+    code: Roboto Mono
+  features:
+  - navigation.tabs           # Tabs at the top
+  - navigation.indexes        # Index pages inside sections
+  - navigation.top            # Back-to-top button
+  - toc.follow                # Keep ToC sticky as you scroll
+  - navigation.footer
+  - content.code.copy
+  - content.code.select
+  - content.code.annotate
   palette:
-
   - media: "(prefers-color-scheme: light)"
     scheme: default
     primary: black
@@ -20,3 +32,53 @@ theme:
     toggle:
       icon: material/weather-night
       name: Switch to light mode
+
+# --------------- NAVIGATION BAR -----------------
+nav:
+- Portfolio: index.md
+- Blog: blog/index.md
+#      - Overview: blog/index.md
+#      - All Posts: blog/posts/index.md
+- Projects: projects/project1.md
+#      - Project 1: projects/project1.md
+#      - Project 2: projects/project2.md
+#  - 📫 Contact: contact.md
+#  - 📄 Resume: resume.md
+
+# --------------- FOOTER, SOCIALS -----------------
+extra:
+  search:
+    placeholder: "Search (Cmd+K)"
+
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/lsharma-202
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/hsekol-hub/
+  - icon: fontawesome/brands/twitter
+    link: https://www.linkedin.com/in/hsekol-hub/
+  - icon: fontawesome/solid/envelope
+    link: mailto:lokesh@example.com
+  copyright:
+    text: "© 2025 Lokesh Sharma. Built with ❤️ using MkDocs Material"
+
+# --------------- PLUGINS ------------------------
+plugins:
+- search:
+    lang: en
+- blog:
+    categories_name: Categories
+    blog_dir: blog/posts
+    blog_toc: true
+    pagination_per_page: 1
+#      readtime: 15
+
+# --------------- JS / CSS -----------------------
+extra_javascript:
+- javascripts/shortcuts.js
+
+extra_css:
+- stylesheets/custom.css
+
+markdown_extensions:
+- footnotes
