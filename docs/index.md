@@ -1,65 +1,103 @@
 ---
-title: Test Title
-comments: true
+title: Lokesh Sharma's Portfolio
+comments: false
+hide:
+ - footer
 ---
 # 👋 Hi, I'm Lokesh Sharma
 
 Welcome to my personal portfolio! I'm passionate about **knowledge graphs**, **machine learning**, and building intelligent systems that make sense of data.
 
----
+[//]: # (---)
 
-## 🚀 Projects
+[//]: # (## 🚀 Projects)
 
-::: tip Project 1: KG-based Recommender System ![Completed](https://img.shields.io/badge/Status-Completed-green)
-Built a semantic recommendation engine using **knowledge graphs** and **graph neural networks**.
-:::
+[//]: # ()
+[//]: # (::: tip Project 1: KG-based Recommender System ![Completed]&#40;https://img.shields.io/badge/Status-Completed-green&#41;)
 
-::: tip Project 2: Ontology Versioning Framework
-Designed a semantic change-tracking system for RDF/OWL ontologies, ensuring version consistency.
-:::
+[//]: # (Built a semantic recommendation engine using **knowledge graphs** and **graph neural networks**.)
 
-## 🚀 Projects
+[//]: # (:::)
 
-<div class="projects-grid">
-  <div class="project-card">
-    ::: tip Project 1: KG-based Recommender System
-    Built a semantic recommendation engine using **knowledge graphs** and **graph neural networks**.
-    :::
-  </div>
-  <div class="project-card">
-    ::: tip Project 2: Ontology Versioning Framework
-    Designed a semantic change-tracking system for RDF/OWL ontologies, ensuring version consistency.
-    :::
-  </div>
-</div>
+[//]: # ()
+[//]: # (::: tip Project 2: Ontology Versioning Framework)
 
-👉 [See all projects →](projects/project1.md)
+[//]: # (Designed a semantic change-tracking system for RDF/OWL ontologies, ensuring version consistency.)
 
+[//]: # (:::)
 
+[//]: # ()
+[//]: # (## 🚀 Projects)
 
-👉 [See all projects →](projects/project1.md)
+[//]: # ()
+[//]: # (<div class="projects-grid">)
 
----
+[//]: # (  <div class="project-card">)
 
-## ✍️ Latest Blog Posts
+[//]: # (    ::: tip Project 1: KG-based Recommender System)
 
-::: info Blog Post 1: Why Graph Neural Networks are Powerful
-A deep dive into how GNNs enable smarter ML models.
-:::
+[//]: # (    Built a semantic recommendation engine using **knowledge graphs** and **graph neural networks**.)
 
-👉 [More posts →](blog/posts/index.md)
+[//]: # (    :::)
 
----
+[//]: # (  </div>)
 
-## 📄 Resume
+[//]: # (  <div class="project-card">)
 
-Looking to collaborate or hire me?
-Here's my [resume](resume.md) and a quick summary of my experience.
+[//]: # (    ::: tip Project 2: Ontology Versioning Framework)
 
----
+[//]: # (    Designed a semantic change-tracking system for RDF/OWL ontologies, ensuring version consistency.)
 
-## 📫 Get in Touch
+[//]: # (    :::)
 
-- ✉️ [Email me](mailto:lokesh@example.com)
-- 💼 [LinkedIn](https://linkedin.com/in/lsharma-202)
-- 🐙 [GitHub](https://github.com/lsharma-202)
+[//]: # (  </div>)
+
+[//]: # (</div>)
+
+[//]: # ()
+[//]: # (👉 [See all projects →]&#40;projects/project1.md&#41;)
+
+[//]: # ()
+[//]: # ()
+[//]: # ()
+[//]: # (👉 [See all projects →]&#40;projects/project1.md&#41;)
+
+[//]: # ()
+[//]: # (---)
+
+[//]: # ()
+[//]: # (## ✍️ Latest Blog Posts)
+
+[//]: # ()
+[//]: # (::: info Blog Post 1: Why Graph Neural Networks are Powerful)
+
+[//]: # (A deep dive into how GNNs enable smarter ML models.)
+
+[//]: # (:::)
+
+[//]: # ()
+[//]: # (👉 [More posts →]&#40;blog/posts/index.md&#41;)
+
+[//]: # ()
+[//]: # (---)
+
+[//]: # ()
+[//]: # (## 📄 Resume)
+
+[//]: # ()
+[//]: # (Looking to collaborate or hire me?)
+
+[//]: # (Here's my [resume]&#40;resume.md&#41; and a quick summary of my experience.)
+
+[//]: # ()
+[//]: # (---)
+
+[//]: # ()
+[//]: # (## 📫 Get in Touch)
+
+[//]: # ()
+[//]: # (- ✉️ [Email me]&#40;mailto:lokesh@example.com&#41;)
+
+[//]: # (- 💼 [LinkedIn]&#40;https://www.linkedin.com/in/connect-lokesh/&#41;)
+
+[//]: # (- 🐙 [GitHub]&#40;https://github.com/lsharma-202&#41;)

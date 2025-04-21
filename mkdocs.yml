@@ -4,6 +4,11 @@ site_url: https://lsharma-202.github.io
 theme:
   name: material
   custom_dir: overrides
+  icon:
+    logo: fontawesome/brands/git-alt
+    previous: fontawesome/solid/angle-left
+    next: fontawesome/solid/angle-right
+#    repo: fontawesome/brands/git
   font:
     text: Open Sans
     code: Roboto Mono
@@ -16,6 +21,8 @@ theme:
   - content.code.copy
   - content.code.select
   - content.code.annotate
+  - header.autohide
+  - announce.dismiss
   palette:
   - media: "(prefers-color-scheme: light)"
     scheme: default
@@ -36,12 +43,10 @@ theme:
 # --------------- NAVIGATION BAR -----------------
 nav:
 - Portfolio: index.md
-- Blog: blog/index.md
-#      - Overview: blog/index.md
-#      - All Posts: blog/posts/index.md
-- Projects: projects/project1.md
-#      - Project 1: projects/project1.md
-#      - Project 2: projects/project2.md
+- Knowledge Graphs: blog/index.md
+- Ontology: projects/project1.md
+- GIS: projects/project2.md
+- Remote Sensing: projects/remote_sensing.md
 #  - 📫 Contact: contact.md
 #  - 📄 Resume: resume.md
 
@@ -49,28 +54,39 @@ nav:
 extra:
   search:
     placeholder: "Search (Cmd+K)"
-
+  generator: false
   social:
+#  - cards_layout: custom
   - icon: fontawesome/brands/github
     link: https://github.com/lsharma-202
   - icon: fontawesome/brands/linkedin
     link: https://www.linkedin.com/in/hsekol-hub/
   - icon: fontawesome/brands/twitter
     link: https://www.linkedin.com/in/hsekol-hub/
+  - icon: fontawesome/brands/slack
+  - icon: fontawesome/brands/discord
   - icon: fontawesome/solid/envelope
     link: mailto:lokesh@example.com
-  copyright:
-    text: "© 2025 Lokesh Sharma. Built with ❤️ using MkDocs Material"
+#  copyright: >
+#    © 2023 Lokesh Sharma. Built with ❤️ using MkDocs Material –
+#    <a href="#__consent">Change cookie settings</a>
+#  consent:
+#    title: Cookie consent
+#    description: >-
+#      We use cookies to recognize your repeated visits and preferences, as well
+#      as to measure the effectiveness of our documentation and whether users
+#      find what they're searching for. With your consent, you're helping us to
+#      make our documentation better.
 
 # --------------- PLUGINS ------------------------
-plugins:
-- search:
-    lang: en
-- blog:
-    categories_name: Categories
-    blog_dir: blog/posts
-    blog_toc: true
-    pagination_per_page: 1
+#plugins:
+#- search:
+#    lang: en
+#- blog:
+#    categories_name: Categories
+#    blog_dir: blog/posts
+#    blog_toc: true
+#    pagination_per_page: 1
 #      readtime: 15
 
 # --------------- JS / CSS -----------------------

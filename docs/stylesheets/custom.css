@@ -84,3 +84,7 @@
   margin-top: 1rem;
   font-size: 1em;
 }
+
+p {
+  text-align: justify;
+}
