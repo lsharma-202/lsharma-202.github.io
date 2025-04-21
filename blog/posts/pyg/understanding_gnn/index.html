@@ -1,0 +1,1180 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://lsharma-202.github.io/blog/posts/pyg/understanding_gnn/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Understanding Graph Neural Networks with PyTorch Geometric - Lokesh Sharma</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/custom.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#graph-datasets" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+  <div style="
+    background-color: rgba(0, 0, 0, 0.03);
+    color: inherit;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  ">
+    🚀 Check out the latest blog post on <a href="/blog/" style="text-decoration: underline;">my blog</a>!
+  </div>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Lokesh Sharma" class="md-header__button md-logo" aria-label="Lokesh Sharma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lokesh Sharma
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Understanding Graph Neural Networks with PyTorch Geometric
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="brown"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Portfolio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Knowledge Graphs
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../projects/project1/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Ontology
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../projects/project2/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  GIS
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../projects/remote_sensing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Remote Sensing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Lokesh Sharma" class="md-nav__button md-logo" aria-label="Lokesh Sharma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+
+    </a>
+    Lokesh Sharma
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Portfolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Knowledge Graphs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/project1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ontology
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/project2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GIS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/remote_sensing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Remote Sensing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#graph-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph Datasets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graph Datasets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cora-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cora Dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#citeseer-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      CiteSeer Dataset
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem Definition
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Problem Definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unravelling-graph-neural-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unravelling Graph Neural Networks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-gnn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic GNN
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-layer-perceptron-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Layer Perceptron Network
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph-convolutional-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph Convolutional Networks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Training
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wrapping-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrapping up
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+
+  <h1>Understanding Graph Neural Networks with PyTorch Geometric</h1>
+
+<p>Graph Neural Networks (GNNs) are a type of machine learning model designed to work with graph-structured data. They help capture relationships between data points by learning from the connections between them.</p>
+<p><strong>Why are GNNs important?</strong> Many real-world systems are naturally structured as graphs. Examples include social networks, the internet, molecular structures, and more. Even data types like text, images, and tables can be converted into graphs to uncover complex relationships.</p>
+<blockquote>
+<p>In this article, we'll go through the basics of graph data structures and how machine learning models can be built on top of them. Here's the roadmap:</p>
+<ul>
+<li>
+<p>Introduction to the Planetoid dataset and problem definition</p>
+</li>
+<li>
+<p>Overview of GNN architectures and key formulas</p>
+</li>
+<li>
+<p>Building PyTorch models using custom Python classes</p>
+</li>
+<li>
+<p>Training and evaluating the models</p>
+</li>
+<li>
+<p>Final thoughts and takeaways</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="graph-datasets">Graph Datasets</h2>
+<p>Graph datasets represent data as nodes (entities) and edges (relationships). Each node and edge can have its own features or attributes.</p>
+<p>We’ll use the Planetoid package from PyTorch Geometric to work with pre-built graph datasets, reducing the amount of setup required.</p>
+<p>One commonly used dataset is Cora, a benchmark citation network. In Cora, each node represents a research paper, and edges represent citation links between papers. Each node has a feature vector based on the presence or absence of specific words in the paper (a total of 1433 possible words).</p>
+<p>Cora is widely used to test GNN models on tasks like node classification and link prediction.</p>
+<p><img alt="Cora Dataset" src="../images/cora_dataset.png" /></p>
+<h3 id="cora-dataset">Cora Dataset</h3>
+<ul>
+<li>
+<p>x = [2708, 1433]: This is the node feature matrix. There are 2708 documents, each represented by a 1433-dimensional one-hot encoded feature vector.</p>
+</li>
+<li>
+<p>edge_index = [2, 10556]: This defines the graph structure. It shows how nodes are connected, with each column representing a directed edge.</p>
+</li>
+<li>
+<p>y = [2708]: These are the ground-truth labels. Each node belongs to exactly one class.</p>
+</li>
+<li>
+<p>train_mask, val_mask, test_mask (each of shape [2708]): These masks are used to split the nodes into training, validation, and test sets.</p>
+</li>
+</ul>
+<blockquote>
+<p>Let's pause for a moment to ponder. With a 1433-word feature vector, one could easily slap on a MLP model 👷 for some good old-fashioned node/document classification. But hey, we're not the ones to settle for the ordinary 🔎. We are going to cross the edge with edge_index to 🤾 dive headfirst with those relationships to supercharge our predictions. So let's get seriously interconnected up in here! 🤝</p>
+</blockquote>
+<pre><code># Let us talk more about edge index/graph connectivity
+print(f&quot;Shape of graph connectivity: {cora[0].edge_index.shape}&quot;)
+print(cora[0].edge_index)
+</code></pre>
+<p><img alt="Cora Dataset Edge Index" src="../images/cora2.png" /></p>
+<p>The edge_index is interesting as it contains two lists with the first list whispering the source node IDs, while the second spills the beans on their destinations. This setup has a fancy name: coordinate list (COO). It's a nifty way to efficiently store sparse matrices, like when you have nodes who aren't exactly chatty with everyone in the room.
+Now, I know what you're thinking. Why not use a simple adjacency matrix? Well, in the realm of graph data, not every node is a social butterfly. Those adjacency matrices? They would be swimming in a sea of zeros, and that's not the most memory-efficient setup. That's why COO is our go-to approach 🧩 and PyG ensures the edges are inherently directed.</p>
+<pre><code># The adjacency matrix can be inferred from the edge_index with a utility function.
+
+adj_matrix = torch_geometric.utils.to_dense_adj(cora[0].edge_index)[0].numpy().astype(int)
+print(f'Shape: {adj_matrix.shape}\nAdjacency matrix: \n{adj_matrix}')
+</code></pre>
+<pre><code># Some more PyG utility functions
+print(f&quot;Directed: {cora[0].is_directed()}&quot;)
+print(f&quot;Isolated Nodes: {cora[0].has_isolated_nodes()}&quot;)
+print(f&quot;Has Self Loops: {cora[0].has_self_loops()}&quot;)
+</code></pre>
+<p><img alt="Cora Dataset Edge Index" src="../images/cora3.png" /></p>
+<p>The Data object has many spectacular utility functions and let's give you a sneak peek with three examples:
+- is_directed tells if the graph is directed, i.e., the adjacency matrix is not symmetric.
+- has_isolated_edges sniffs out nodes that are loners, disconnected from the bustling crowd. These disconnected souls are like puzzle pieces without a complete picture, making downstream ML tasks a real head-scratcher.
+- has_self_loops informs if a node is in a relationship with itself ❣</p>
+<blockquote>
+<p>Let's shortly talk about visualizations. Converting PyG Data objects into NetworkX graph objects and plotting them is a cake walk. But, hold your horses! Our guest list (number of nodes) is over 2k long, so an attempt to visualize it would be like squeezing a footballs stadium into your living room. Yeah, you don't want that ⛔. So, while we are not participating in the plot parties, just know that this graph is primed and ready for some serious networking action, even if it's all happening behind the scenes 🌐🕵️‍♀️</p>
+</blockquote>
+<h3 id="citeseer-dataset">CiteSeer Dataset</h3>
+<p>CiteSeer is the scholarly 🎓 sibling of Cora from the Platenoid family. It stands on the stage with 3,327 scientific papers with each node having exactly one of the 6 elite categories (class labels). Now, let's talk about data stats, where each paper/node in the CiteSeer universe is defined by a 3703-dimensional word vector with 0/1 values.</p>
+<p><code>citeseer = load_planetoid(name='CiteSeer')</code></p>
+<p><img alt="CiteSeer Dataset" src="../images/citeseer.png" /></p>
+<pre><code>print(f&quot;Directed: {citeseer[0].is_directed()}&quot;)
+print(f&quot;Isolated Nodes: {citeseer[0].has_isolated_nodes()}&quot;)
+print(f&quot;Has Self Loops: {citeseer[0].has_self_loops()}&quot;)
+</code></pre>
+<p><img alt="CiteSeer Dataset" src="../images/citeseer2.png" /></p>
+<blockquote>
+<p>With the citation network data duo that has already taken on the stage, we have got a slight twist in the scholarly saga. The CiteSeer dataset isn't all sunshine; it's got isolated nodes (remember our loners ❓). Now classiffication task is gonna be slightly difficult with these guys in the game.
+Here's the catch: these isolated nodes pose a challenge to the GNNs aggregation (we will shortly talk about it) magic. We are limited to using only the feature vector representation for these isolated nodes, something that Multi-layer Perceptron (MLP) models do.
+The absence of adjacency matrix information might take its toll with a drop in accuracy. While we can't do much to fix this problem, we will do our best to shed light on the effect of their no-connectivity 📚🔍.</p>
+</blockquote>
+<pre><code># Node degree distribution
+
+node_degrees = torch_geometric.utils.degree(citeseer.edge_index[0]).numpy()
+node_degrees = Counter(node_degrees)  # convertt to a dictionary object
+
+# Bar plot
+fig, ax = plt.subplots(figsize=(18, 6))
+ax.set_xlabel('Node degree')
+ax.set_ylabel('Number of nodes')
+ax.set_title('CiteSeer - Node Degree Distribution')
+plt.bar(node_degrees.keys(),
+        node_degrees.values(),
+        color='#0A047A')
+</code></pre>
+<p><img alt="Degree Distribution" src="../images/degree_distribution.png" /></p>
+<p>CiteSeer has a majority of nodes with 1 or 2 neighbors. Now you might be thinking, "What's the big deal?". Well, let me tell you, it would be like hosting a party with just a couple of friends - it is cozy, but there is no rave. The global information about their connections to the community is gonna be lacking. This could be another challenge for GNNs when compared with Cora.</p>
+<h2 id="problem-definition">Problem Definition</h2>
+<p>Our mission is now crystal clear: armed with node feature representations of each node and their connections to their neighboring nodes, we are on a quest to predict the correct class label for each and every node in the given graph.</p>
+<blockquote>
+<p>Note: we are not only relying on the surface-level node feature matrix but are diving deep into the data fabric, analyzing every interaction, and deciphering every whisper. Its more about understanding the dataset than make simple raw predictions based on patterns.</p>
+</blockquote>
+<h3 id="unravelling-graph-neural-networks">Unravelling Graph Neural Networks</h3>
+<p>We are about to demystify the magic behind GNNs. They represent nodes, edges, or graphs as numerical vectors such that each node resonates with its outgoing edges. But what's the secret sauce behind the GNNs? The technique of "message passing, aggregation, and update" operations. An analogy for this could be hosting a neighborhood block party, where each node aggregates information with its neighbors, transforms and updates itself, and then also share its updated insights with the rest of the crowd. It's about updating their feature vectors iteratively, infusing them with localized wisdom from their n-hop neighbors. Check out this gem: GNN Introduction which explains every concept with clarity.</p>
+<p>GNNs are made up of layers, with each layer extending its hop to access information from neighbors. For example, a GNN with 2 layers a node would consider friend-of-firend distance to collect insights and update its representation.</p>
+<h2 id="basic-gnn">Basic GNN</h2>
+<p>We are creating a base class that lays the groundwork for our actual GNN models.We are also setting up private methods to initialize animation-related statistics. The base class will be inherited later by GCN and GAT models to tap into the shared functionalities without fuss. Effortless efficiency is right at your fingertips 🛠️📊🏗️.</p>
+<pre><code>class BaseGNN(torch.nn.Module):
+    &quot;&quot;&quot;
+    Base class for Graph Neural Network models.
+    &quot;&quot;&quot;
+
+    def __init__(
+        self,
+    ):
+        super().__init__()
+        torch.manual_seed(48)
+        # Initialize lists to store animation-related statistics
+        self._init_animate_stats()
+        self.optimizer = None
+
+    def _init_animate_stats(self) -&gt; None:
+        &quot;&quot;&quot;Initialize animation-related statistics.&quot;&quot;&quot;
+        self.embeddings = []
+        self.losses = []
+        self.train_accuracies = []
+        self.val_accuracies = []
+        self.predictions = []
+
+    def _update_animate_stats(
+        self,
+        embedding: torch.Tensor,
+        loss: torch.Tensor,
+        train_accuracy: float,
+        val_accuracy: float,
+        prediction: torch.Tensor,
+    ) -&gt; None:
+        # Update animation-related statistics with new data
+        self.embeddings.append(embedding)
+        self.losses.append(loss)
+        self.train_accuracies.append(train_accuracy)
+        self.val_accuracies.append(val_accuracy)
+        self.predictions.append(prediction)
+
+    def accuracy(self, pred_y: torch.Tensor, y: torch.Tensor) -&gt; float:
+        &quot;&quot;&quot;
+        Calculate accuracy between predicted and true labels.
+
+        :param pred (torch.Tensor): Predicted labels.
+        :param y (torch.Tensor): True labels.
+
+        :returns: Accuracy value.
+        &quot;&quot;&quot;
+        return ((pred_y == y).sum() / len(y)).item()
+
+    def fit(self, data: Data, epochs: int) -&gt; None:
+        &quot;&quot;&quot;
+        Train the GNN model on the provided data.
+
+        :param data: The dataset to use for training.
+        :param epochs: Number of training epochs.
+        &quot;&quot;&quot;
+        # Use CrossEntropyLoss as the criterion for training
+        criterion = torch.nn.CrossEntropyLoss()
+        optimizer = self.optimizer
+
+        self.train()
+        for epoch in range(epochs + 1):
+            # Training
+            optimizer.zero_grad()
+            _, out = self(data.x, data.edge_index)
+            loss = criterion(out[data.train_mask], data.y[data.train_mask])
+            acc = self.accuracy(
+                out[data.train_mask].argmax(dim=1), data.y[data.train_mask]
+            )
+            loss.backward()
+            optimizer.step()
+
+            # Validation
+            val_loss = criterion(out[data.val_mask], data.y[data.val_mask])
+            val_acc = self.accuracy(
+                out[data.val_mask].argmax(dim=1), data.y[data.val_mask]
+            )
+            kwargs = {
+                &quot;embedding&quot;: out.detach().cpu().numpy(),
+                &quot;loss&quot;: loss.detach().cpu().numpy(),
+                &quot;train_accuracy&quot;: acc,
+                &quot;val_accuracy&quot;: val_acc,
+                &quot;prediction&quot;: out.argmax(dim=1).detach().cpu().numpy(),
+            }
+
+            # Update animation-related statistics
+            self._update_animate_stats(**kwargs)
+            # Print metrics every 10 epochs
+            if epoch % 25 == 0:
+                print(
+                    f&quot;Epoch {epoch:&gt;3} | Train Loss: {loss:.3f} | Train Acc: &quot;
+                    f&quot;{acc * 100:&gt;6.2f}% | Val Loss: {val_loss:.2f} | &quot;
+                    f&quot;Val Acc: {val_acc * 100:.2f}%&quot;
+                )
+
+    @torch.no_grad()
+    def test(self, data: Data) -&gt; float:
+        &quot;&quot;&quot;
+        Evaluate the model on the test set and return the accuracy score.
+
+        :param data: The dataset to use for testing.
+        :return: Test accuracy.
+        &quot;&quot;&quot;
+        # Set the model to evaluation mode
+        self.eval()
+        _, out = self(data.x, data.edge_index)
+        acc = self.accuracy(
+            out.argmax(dim=1)[data.test_mask], data.y[data.test_mask]
+        )
+        return acc
+</code></pre>
+<h2 id="multi-layer-perceptron-network">Multi-Layer Perceptron Network</h2>
+<p>Here comes the vanilla Multi-layer Perceptron Network! In theory, we could predict a document/node's category just by looking at its features. No need for relational info - just the good old bag-of-words representation. To test the hypothesis, we define a simple 2-layer MLP that works solely with input node features.</p>
+<h2 id="graph-convolutional-networks">Graph Convolutional Networks</h2>
+<p>Convolutional Neural Networks (CNNs) have taken the ML scene by storm, thanks to their neat parameter-sharing trick and the ability to efficiently extract latent features. But aren't images also graphs? Confused! Let's think of each pixel as a node and the RGB values as node features. So a question emerges: can these CNN tricks be pulled off in the realm of irregular graphs?</p>
+<p>It's not as simple as copy-pasting. Graphs have their own quirks:
+* <strong>Lack of Consistency</strong>: Flexibility's great, but it brings some chaos. Just think of molecules with the same formula but different structures. Graphs can be tricky like that.
+* <strong>Node-Order Mystery</strong>: Graphs have no fixed order, unlike texts or images. A node's like a guest at a party - no set place. Algorithms need to be chill 🕳 about this lack of node hierarchy.
+* <strong>Scaling Woes</strong>: Graphs can grow BIG. Imagine social networks with billions of users and trillions of edges. Operating on that scale isn't a walk in the park.</p>
+<pre><code>class GCN(BaseGNN):
+    &quot;&quot;&quot;
+    Graph Convolutional Network model for node classification.
+    &quot;&quot;&quot;
+
+    def __init__(
+        self, input_dim: int, hidden_dim: int, output_dim: int
+    ):
+        super().__init__()
+        self.gcn1 = GCNConv(input_dim, hidden_dim)
+        self.gcn2 = GCNConv(hidden_dim, output_dim)
+        self.optimizer = torch.optim.Adam(
+            self.parameters(), lr=0.01, weight_decay=5e-4
+        )
+
+    def forward(
+        self, x: torch.Tensor, edge_index: torch.Tensor
+    ) -&gt; torch.Tensor:
+        &quot;&quot;&quot;
+        Forward pass of the Graph Convolutional Network model.
+
+        :param (torch.Tensor): Input feature tensor.
+        :param (torch.Tensor): Graph connectivity information
+        :returns torch.Tensor: Output tensor.
+        &quot;&quot;&quot;
+        h = F.dropout(x, p=0.5, training=self.training)
+        h = self.gcn1(h, edge_index).relu()
+        h = F.dropout(h, p=0.5, training=self.training)
+        h = self.gcn2(h, edge_index)
+
+       return h, F.log_softmax(h, dim=1)
+</code></pre>
+<pre><code>---
+
+class GAT(BaseGNN):
+    def __init__(self, input_dim: int, hidden_dim: int, output_dim: int,
+                 heads: int=8):
+        super().__init__()
+        torch.manual_seed(48)
+        self.gcn1 = GATConv(input_dim, hidden_dim, heads=heads)
+        self.gcn2 = GATConv(hidden_dim * heads, output_dim, heads=1)
+        self.optimizer = torch.optim.Adam(
+            self.parameters(), lr=0.01, weight_decay=5e-4
+        )
+
+    def forward(
+            self, x: torch.Tensor, edge_index: torch.Tensor
+    ) -&gt; torch.Tensor:
+        &quot;&quot;&quot;
+        Forward pass of the Graph Convolutional Network model.
+
+        :param (torch.Tensor): Input feature tensor.
+        :param (torch.Tensor): Graph connectivity information
+        :returns torch.Tensor: Output tensor.
+        &quot;&quot;&quot;
+        h = F.dropout(x, p=0.6, training=self.training)
+        h = self.gcn1(h, edge_index).relu()
+        h = F.dropout(h, p=0.6, training=self.training)
+        h = self.gcn2(h, edge_index).relu()
+        return h, F.log_softmax(h, dim=1)
+</code></pre>
+<h2 id="model-training">Model Training</h2>
+<p>Let us see how the latent representations of the nodes in the graph evolve over time, as the model undergoes training for node classification tasks.</p>
+<pre><code>num_epochs = 200
+def train_and_test_model(model, data: Data, num_epochs: int) -&gt; tuple:
+    &quot;&quot;&quot;
+    Train and test a given model on the provided data.
+
+    :param model: The PyTorch model to train and test.
+    :param data: The dataset to use for training and testing.
+    :param num_epochs: Number of training epochs.
+    :return: A tuple containing the trained model and the test accuracy.
+    &quot;&quot;&quot;
+    model.fit(data, num_epochs)
+    test_acc = model.test(data)
+    return model, test_acc
+
+mlp = MLP(
+    input_dim=cora.num_features,
+    hidden_dim=16,
+    out_dim=cora.num_classes,
+)
+print(f&quot;{mlp}\n&quot;, f&quot;-&quot;*88)
+mlp, test_acc_mlp = train_and_test_model(mlp, data, num_epochs)
+print(f&quot;-&quot;*88)
+print(f&quot;\nTest accuracy: {test_acc_mlp * 100:.2f}%\n&quot;)
+</code></pre>
+<p><img alt="MLP Training Loop" src="../images/mlp.png" /></p>
+<p><img alt="MLP Embeddings" src="../images/mlp2.gif" /></p>
+<blockquote>
+<p>As one can see, our MLP seems to be struggling in the spotlight, with just around 55% test accuracy. But why does the MLP do not perform better? The main culprit is none other than overfitting - the model's become too cozy with the training data, leaving it clueless when facing new node representations. Its like predicting labels with one eye closed. It also fails to incorporate an important bias into the model. That is exactly where GNNs come into play and can help to boost the performance of our model.</p>
+</blockquote>
+<pre><code>gcn = GCN(
+    input_dim=cora.num_features,
+    hidden_dim=16,
+    output_dim=cora.num_classes,
+)
+print(f&quot;{gcn}\n&quot;, f&quot;-&quot;*88)
+gcn, test_acc_gcn = train_and_test_model(gcn, data, num_epochs)
+print(f&quot;-&quot;*88)
+print(f&quot;\nTest accuracy: {test_acc_gcn * 100:.2f}%\n&quot;)
+</code></pre>
+<p><img alt="GCN Training Loop" src="../images/gcn.png" />
+<img alt="GCN Embeddings" src="../images/gcn.gif" /></p>
+<p>And there you have it - by just swapping out those linear layers GCN layers, we're skyrocketing to a dazzling 79% test accuracy!✨ A testament to the power of relational information between nodes. It's like we've turned on a data spotlight, revealing hidden patterns and connections that were previously lost in the shadows. The numbers don't lie - GNNs aren't just algorithms; they're data whisperers.</p>
+<blockquote>
+<p>Similarly, even GATs perform with a higher accuracy (81%) due to their multi-headed attention feature.</p>
+</blockquote>
+<pre><code>gat = GAT(
+    input_dim=cora.num_features,
+    hidden_dim=8,
+    output_dim=cora.num_classes,
+    heads=6,
+)
+print(f&quot;{gat}\n&quot;, f&quot;-&quot;*88)
+gat, test_acc_gat = train_and_test_model(gat, data, num_epochs)
+print(f&quot;-&quot;*88)
+print(f&quot;\nTest accuracy: {test_acc_gat * 100:.2f}%\n&quot;)
+</code></pre>
+<p><img alt="GAT Training Loop" src="../images/gat.png" />
+<img alt="GAT Embeddings" src="../images/gat.gif" /></p>
+<p><img alt="Model Performace" src="../images/model_performance.png" /></p>
+<p>Let us look at the latent representation of our CiteSeer dataset using the TSNE dimensionality reduction technique. We use <code>matplotlib</code> and <code>seaborn</code> for plotting the nodes of the graph.</p>
+<pre><code>import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+import seaborn as sns
+
+# Get embeddings
+embeddings, _ = gat(citeseer[0].x, citeseer[0].edge_index)
+
+# Train TSNE
+tsne = TSNE(n_components=2, learning_rate='auto',
+            init='pca').fit_transform(embeddings.detach())
+
+# Set the Seaborn theme
+sns.set_theme(style=&quot;whitegrid&quot;)
+
+# Plot TSNE
+plt.figure(figsize=(10, 10))
+plt.axis('off')
+sns.scatterplot(x=tsne[:, 0], y=tsne[:, 1], hue=data.y, palette=&quot;viridis&quot;, s=50)
+plt.legend([], [], frameon=False)
+plt.show()
+</code></pre>
+<p><img alt="CiteSeer Latent Representation from the trained GAT model" src="../images/tsne.png" /></p>
+<p>The data canvas paints a revealing picture: nodes of the same class gravitate towards each other forming clusters for each of the six class labels. However, outliers isolated nodes have a role in this drama, as they have introduced a twist to our accuracy scores.</p>
+<blockquote>
+<p>Remember our inital guess about the impact of mising edges? Well the hypothesis has its say. We are putting through another test, where I aim to calculate performance of GAT model by calculating the accuracy categorized by node degrees, thus revealing the importance of connectivity.</p>
+</blockquote>
+<p><img alt="GAT performance categorized by node degrees on CiteSeer" src="../images/node_degrees.png" /></p>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>And with that, we reach the final section, I like to summarize the key takeaways:
+1. We have seen why GNNs outshine MLPs and underscored the pivotal role of node relations.
+2. GATs often outperform GCNs due to self-attention's dynamic weights, leading to better embeddings.
+3. Be cautious with layer stacking; too many layers can lead to over-smoothing, where embeddings converge and lose diversity.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+  <h2 id="__comments">Comments</h2>
+  <!-- Insert generated snippet here -->
+  <script src="https://giscus.app/client.js"
+          data-repo="lsharma-202/lsharma-202.github.io"
+          data-repo-id="R_kgDONYax8Q"
+          data-category="General"
+          data-category-id="DIC_kwDONYax8c4CpSG4"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="noborder_gray"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+  </script>
+
+  <!-- Synchronize Giscus theme with palette -->
+  <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    // Set palette on initial load
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate"
+        ? "transparent_dark"
+        : "light"
+
+      // Instruct Giscus to set theme
+      giscus.setAttribute("data-theme", theme)
+    }
+
+    // Register event handlers after documented loaded
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate"
+            ? "transparent_dark"
+            : "light"
+
+          // Instruct Giscus to change theme
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/lsharma-202" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/hsekol-hub/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/hsekol-hub/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1s21.16-47.06 47.06-47.06h47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06S448 171 448 196.9s-21.16 47.06-47.06 47.06h-47.06zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06S309 480 283.1 480s-47.06-21.16-47.06-47.06v-47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06s21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485 485 0 0 0 404.081 32.03a1.82 1.82 0 0 0-1.923.91 338 338 0 0 0-14.9 30.6 447.9 447.9 0 0 0-134.426 0 310 310 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.7 483.7 0 0 0-119.688 37.107 1.7 1.7 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.02 2.02 0 0 0 .765 1.375 487.7 487.7 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348 348 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321 321 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251 251 0 0 0 9.109-7.137 1.82 1.82 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.81 1.81 0 0 1 1.924.233 235 235 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.4 301.4 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391 391 0 0 0 30.014 48.815 1.86 1.86 0 0 0 2.063.7A486 486 0 0 0 610.7 405.729a1.88 1.88 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541M222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241m195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:lokesh@example.com" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2a63.9 63.9 0 0 1-76.8 0z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.tabs", "navigation.indexes", "navigation.top", "toc.follow", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate", "header.autohide", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../../../../javascripts/shortcuts.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,87 @@
+/* ========== GLOBAL STYLES ========== */
+.md-typeset h1 {
+  font-size: 2.4em;
+  font-weight: bold;
+  margin-top: 0.5em;
+  margin-bottom: 0.6em;
+}
+
+.md-typeset h2 {
+  font-size: 1.8em;
+  margin-top: 1.4em;
+  border-bottom: 2px solid var(--md-primary-fg-color);
+  padding-bottom: 0.3em;
+}
+
+.md-typeset p {
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* ========== HOMEPAGE CUSTOMIZATION ========== */
+.md-content__inner {
+  max-width: 900px;
+  margin: auto;
+}
+
+.md-typeset a {
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+}
+
+.md-typeset a:hover {
+  text-decoration: underline;
+}
+
+/* ========== FOOTER CUSTOMIZATION ========== */
+.md-footer-meta {
+  text-align: center;
+  font-size: 0.85em;
+  padding: 1em 0;
+  color: #aaa;
+  background: #202124;
+}
+
+.md-footer-meta a {
+  color: #ccc;
+}
+
+.md-footer-meta a:hover {
+  color: white;
+}
+
+/* ========== GRID LAYOUT FOR PROJECT CARDS ========== */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.project-card .md-admonition-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--md-primary-fg-color);
+}
+
+.project-card .md-admonition-content {
+  margin-top: 1rem;
+  font-size: 1em;
+}
