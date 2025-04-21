@@ -15,6 +15,7 @@
 
 .md-typeset p {
   line-height: 1.7;
+  text-align: justify;
 }
 
 /* ========== HOMEPAGE CUSTOMIZATION ========== */
@@ -83,8 +84,4 @@
 .project-card .md-admonition-content {
   margin-top: 1rem;
   font-size: 1em;
-}
-
-p {
-  text-align: justify;
 }
